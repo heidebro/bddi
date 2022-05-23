@@ -23,6 +23,9 @@ int free_linked_list_icons(struct icon_link* list){
     icon_list_ptr = NULL;
 }
 
+/*
+ *
+ */
 void load_icon_list(){
     char *home_dir = getenv("HOME");
     int home_dir_len = strlen(home_dir);
@@ -49,7 +52,12 @@ void load_icon_list(){
         status = fscanf(file, "%s %s", link->class_name, link->icon);
 
         // If no two elements were found, quit.
-        if(status != 2){ break; }
+        if(status != 2){ 
+            free(link);
+            break;
+        }
+
+        printf("Loading icon for %s\n", link->class_name);
 
         if (icon_list_start == NULL){
             icon_list_ptr = icon_list_start = link;

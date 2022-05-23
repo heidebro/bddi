@@ -18,3 +18,4 @@ int update_desktop(char*);
 char *get_name(struct link*);
 int free_linked_list_nodes(struct link*);
 int set_desktop_name(char*, char*);
+int main(int, char*[]);
