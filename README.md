@@ -12,42 +12,28 @@ based on this a dynamic name will be generated and set. Using an Icon font for t
 
 --- 
 
-There's also a Python version available in the `python` branch if you feel more comfortable with running that.
-It has the same featureset, only that you can configure it directly within the python file.
-
-I wanted to exercise my C skills a little, thus the rewrite published here.
+This branch holds my initial Python Proof-of-Concept. Recommended if you'd rather run a memory-safe 
+language at the cost of some performance.
+The file already contains some default icons from [Nerd Fonts](https://www.nerdfonts.com/)..
 
 ## Build & Install
 
 ### Requirements
 
-* make      - For compilation with make
-* gcc       - For compilation with make
-* json-c    - For parsing the desktop info returned by BSPWM
+* python3      - For compilation with make
 * A Nerd Fonts capable font
 
-### Installation
+### Running
 
-Installing can be done with the provided makefile as follows:
+Simply run the python file:
 
 ```sh
-make
-make install
+python3 bspwm-dyn-icons.py
 ```
-
-This will create a configuration file under ~/.config/bddi and copy the executable to /usr/bin
 
 ## Configuration
 
-The program will look in $HOME/.config/bddi for a file called `icons.list`.
-This file may hold one definition per line of the format:
-
-```txt
-WM_CLASS_NAME Name
-```
-
-WM_CLASS_NAME is a X11 property associated with each open window.
-All windows of a certain program usually hold the same WM_CLASS_NAME, so they can be identified.
+To add new programs, simply append new key-value-pairs to the `icon_dict` within the python file.
 To find the WM_CLASS_NAME of a program you can use the `xprop` utility.
 
 ## Bugs
