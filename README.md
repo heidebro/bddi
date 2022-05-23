@@ -1,14 +1,17 @@
 # bddi - BSPWM dynamic desktop icons
 
-# TODO INSERT GIF
+![Example with Polybar and NerdFont icons](demo.gif)
 
 This daemon dynamically renames BSPWMs desktops based on what programs are open within them.
 
+(The demo GIF shows Polybar with NerdFont icons being used as the window names)
+
 ## How?
 The program opens a connection to BSPWMs UNIX socket, which is also how `bspc` communicates with it.  
-Via this socket, bddi listenes for node events like openening, closing or moving a window.  
+Via this socket, `bddi` listenes for node events like opening, closing or moving a window.  
 When recieved, the nodes open on the desktop associated with the event will be requested, parsed and  
-based on this a dynamic name will be generated and set. Using an Icon font for the names is recommended.
+based on this a dynamic name will be generated and set.  
+Using an Icon font for the names is recommended.
 
 --- 
 
@@ -23,8 +26,8 @@ I wanted to exercise my C skills a little, thus the rewrite published here.
 
 * make      - For compilation with make
 * gcc       - For compilation with make
-* json-c    - For parsing the desktop info returned by BSPWM
-* A Nerd Fonts capable font
+* [json-c](https://github.com/json-c/json-c)    - For parsing the desktop info returned by BSPWM
+* (optional) A [Nerd Fonts](https://www.nerdfonts.com/) capable font
 
 ### Installation
 
@@ -43,12 +46,14 @@ The program will look in $HOME/.config/bddi for a file called `icons.list`.
 This file may hold one definition per line of the format:
 
 ```txt
-WM_CLASS_NAME Name
+WM_CLASS NAME
 ```
 
-WM_CLASS_NAME is a X11 property associated with each open window.
-All windows of a certain program usually hold the same WM_CLASS_NAME, so they can be identified.
-To find the WM_CLASS_NAME of a program you can use the `xprop` utility.
+WM_CLASS is a X11 property associated with each open window.
+All windows of a certain program usually hold the same WM_CLASS, so they can be identified.
+To find the WM_CLASS of a program you can use the `xprop` utility.
+
+The NAME part can be any string. It's recommended to use icons from an icon font here.
 
 ## Bugs
 
