@@ -44,16 +44,16 @@ int subscribe(int sock_fd){
     res = send(sock_fd, msg, msglen, 0);
     if (res <= 0) printf("ERROR");
 
-	printf("Listening for node events...\n");
+    printf("Listening for node events...\n");
 
     while(res > 0){
         res = recv(sock_fd, resp, sizeof(resp), 0);
         resp[res] = '\0';
 
         if (res <= 0) {
-			printf("ERROR");
-			break;
-		}
+            printf("ERROR");
+            break;
+        }
 
         char *sep = " ";
         char *token, *dest_desktop_id, *src_desktop_id;
@@ -86,10 +86,10 @@ int update_desktop(char *desktop_id){
     char *name;
 
     // Get desktop info JSON tree 
-	desktop_info = json_object_object_get(desktop_info, "root");
+    desktop_info = json_object_object_get(desktop_info, "root");
 
     // Populate linked list with leaf nodes
-	get_nodes(desktop_info);
+    get_nodes(desktop_info);
 
     // Generate name based on leaf nodes
     name = get_name(start);
@@ -102,7 +102,7 @@ int update_desktop(char *desktop_id){
 
 
     // Free JSON tree
-	json_object_put(desktop_info);
+    json_object_put(desktop_info);
     free(name);
 }
 
@@ -188,20 +188,20 @@ char *get_name(struct link* list){
  */
 void get_nodes(struct json_object *tree){
 
-	if (tree == NULL ) {
-		printf("ERROR tree: %p", tree);
-	   	return;
-	}
+    if (tree == NULL ) {
+        printf("ERROR tree: %p", tree);
+          return;
+    }
 
     struct link *link = calloc(sizeof(struct link), 1);
 
-	// recursively get leaf nodes
-	json_object *first = json_object_object_get(tree, "firstChild");
-	json_object *second = json_object_object_get(tree, "secondChild");
-	json_object *node = json_object_object_get(tree, "client");
+    // recursively get leaf nodes
+    json_object *first = json_object_object_get(tree, "firstChild");
+    json_object *second = json_object_object_get(tree, "secondChild");
+    json_object *node = json_object_object_get(tree, "client");
 
     // Populate linked list
-	if (node != NULL) {
+    if (node != NULL) {
         link->node = node;
         link->next = NULL;
 
@@ -211,10 +211,10 @@ void get_nodes(struct json_object *tree){
             ptr->next = link;
             ptr = ptr->next;
         }
-	} else {
-		get_nodes(first);
-		get_nodes(second);
-	}
+    } else {
+        get_nodes(first);
+        get_nodes(second);
+    }
 }
 
 /*
@@ -225,15 +225,15 @@ struct json_object *get_desktop_info(char *desktop_id){
     struct json_object *parsed_json;
     int res, bytes_recieved = 0;
     char *json = calloc(CHUNK_SIZE, 16);
-	char resp[512];
+    char resp[512];
     char msg[23];
     int sock_fd = get_socket();
 
     // Prepare request
-	strncpy(msg, "query", 6);
-	strncpy((msg+6), "-T", 3);
-	strncpy((msg+9), "-d", 3);
-	strncpy((msg+12), desktop_id, 11);
+    strncpy(msg, "query", 6);
+    strncpy((msg+6), "-T", 3);
+    strncpy((msg+9), "-d", 3);
+    strncpy((msg+12), desktop_id, 11);
 
     // Send request
     res = send(sock_fd, msg, 23, 0);

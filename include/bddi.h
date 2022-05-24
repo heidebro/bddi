@@ -7,8 +7,8 @@
 
 // Struct for leaf node linked list
 struct link{
-	struct json_object *node;
-	struct link *next;
+    struct json_object *node;
+    struct link *next;
 };
 
 // Function definitions

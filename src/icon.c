@@ -4,6 +4,7 @@
 #include <string.h>
 #include "icon.h"
 
+// Global handles for icon LL
 struct icon_link *icon_list_start = NULL, *icon_list_ptr;
 
 /*
@@ -24,9 +25,9 @@ int free_linked_list_icons(struct icon_link* list){
 }
 
 /*
- *
+ *  Construct config path and try to open config file
  */
-void load_icon_list(){
+FILE *open_config_file(){
     char *home_dir = getenv("HOME");
     int home_dir_len = strlen(home_dir);
     char *conf_dir = calloc(home_dir_len + 25, 1);
@@ -41,6 +42,16 @@ void load_icon_list(){
         printf("No icon file found");
         exit(-1);
     }
+
+    return file;
+}
+
+/*
+ *  Load icons defined in config file
+ */
+void load_icon_list(){
+
+    FILE *file = open_config_file();
 
     printf("Loading icons\n");
 
@@ -68,8 +79,12 @@ void load_icon_list(){
     }
 
     free(conf_dir);
+    close(file);
 }
 
+/*
+ *  Return icon corresponding to passed class_name if present in icon LL
+ */
 char *get_icon(const char *class_name){
     struct icon_link *link = icon_list_start;
     int class_name_len = strlen(class_name);
