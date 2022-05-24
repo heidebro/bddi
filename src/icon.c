@@ -36,13 +36,13 @@ FILE *open_config_file(){
     strncat(conf_dir, "/.config/bddi/icons.list", 25);
 
     FILE *file = fopen(conf_dir, "r");
-    int status;
 
     if (file == NULL) {
         printf("No icon file found");
         exit(-1);
     }
 
+    free(conf_dir);
     return file;
 }
 
@@ -50,7 +50,7 @@ FILE *open_config_file(){
  *  Load icons defined in config file
  */
 void load_icon_list(){
-
+    int status;
     FILE *file = open_config_file();
 
     printf("Loading icons\n");
@@ -78,8 +78,7 @@ void load_icon_list(){
         }
     }
 
-    free(conf_dir);
-    close(file);
+    fclose(file);
 }
 
 /*
