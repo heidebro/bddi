@@ -7,6 +7,10 @@
 // Global handles for icon LL
 struct icon_link *icon_list_start = NULL, *icon_list_ptr;
 
+void cleanup(){
+    free_linked_list_icons(icon_list_start);
+}
+
 /*
  *  Free the linked list for icons
  */

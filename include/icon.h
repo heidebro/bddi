@@ -11,3 +11,4 @@ struct icon_link{
 void load_icon_list();
 char *get_icon(const char*);
 int free_linked_list_icons(struct icon_link*);
+void cleanup();

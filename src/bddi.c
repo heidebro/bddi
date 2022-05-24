@@ -39,7 +39,7 @@ int subscribe(int sock_fd){
     char resp[512];
     int res;
     char msg[] = "subscribe\x00node";
-    int msglen = sizeof("subscribe\x00node");
+    int msglen = sizeof(msg);
 
     res = send(sock_fd, msg, msglen, 0);
     if (res <= 0) printf("ERROR");
@@ -76,6 +76,8 @@ int subscribe(int sock_fd){
             update_desktop(dest_desktop_id);
         }
     }
+
+    close(sock_fd);
 }
 
 /*
@@ -122,8 +124,7 @@ int set_desktop_name(char *desktop_id, char *name){;
 
     send(sock_fd, query, QUERY_SIZE, 0);
 
-    char *resp[512];
-
+    free(query);
     close(sock_fd); 
 }
 
@@ -238,7 +239,6 @@ struct json_object *get_desktop_info(char *desktop_id){
     // Send request
     res = send(sock_fd, msg, 23, 0);
 
-
     // Receive answer
     do{
         // Resize array that holds json
@@ -252,11 +252,13 @@ struct json_object *get_desktop_info(char *desktop_id){
         bytes_recieved += CHUNK_SIZE;
     } while(res > 0);
 
-    // Terminate connection
-    close(sock_fd);
-
     // Parse and return json
     parsed_json = json_tokener_parse(json);
+
+    // Terminate connection
+    close(sock_fd);
+    free(json);
+
     return parsed_json;
 }
 
@@ -267,5 +269,6 @@ int main(int argc, char *argv[]){
     int sock_fd = get_socket();
     load_icon_list();
     subscribe(sock_fd);
+    cleanup();
     return 0;
 }
