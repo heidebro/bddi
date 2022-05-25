@@ -17,15 +17,26 @@ struct link *start = NULL, *ptr;
  *  Opens a bspwm socket and returns its filedescriptor
  */ 
 int get_socket(){
-    int sock_fd;
+    int sock_fd, connect_status;
     struct sockaddr_un sock_address;
 
     sock_address.sun_family = AF_UNIX;
 
     sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+
+    if (sock_fd == -1) {
+        fprintf(stderr, "Couldn't get socket filedescriptor.");
+        exit(-1);
+    }
+
     snprintf(sock_address.sun_path, sizeof(sock_address.sun_path), "%s", "/tmp/bspwm_0_0-socket");
 
-    connect(sock_fd, (struct sockaddr *) &sock_address, sizeof(sock_address));
+    connect_status = connect(sock_fd, (struct sockaddr *) &sock_address, sizeof(sock_address));
+
+    if (connect_status == -1) {
+        fprintf(stderr, "Couldn't open BSPWM socket.");
+        exit(-1);
+    }
 
     return sock_fd;
 }
@@ -101,7 +112,6 @@ int update_desktop(char *desktop_id){
 
     // Clean linked list
     free_linked_list_nodes(start);
-
 
     // Free JSON tree
     json_object_put(desktop_info);
