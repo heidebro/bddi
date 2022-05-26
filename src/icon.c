@@ -64,7 +64,9 @@ void load_icon_list(){
         struct icon_link *link = calloc(sizeof(struct icon_link), 1);
         link->next = NULL;
 
-        status = fscanf(file, "%s %s", link->class_name, link->icon);
+        // Read class_name and icon strings from config file, limiting the 
+        // number of characters read to prevent overflowing the buffers [sizeof(buf)-1]
+        status = fscanf(file, "%63s %9s", link->class_name, link->icon);
 
         // If no two elements were found, quit.
         if(status != 2){ 
